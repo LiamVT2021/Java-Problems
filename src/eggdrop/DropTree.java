@@ -48,15 +48,15 @@ public class DropTree {
 		while (getEntry(worstCase, eggs).length < floors)
 			worstCase++;
 		if (out) {
-			int worst = 0;
+			int maxDrops = 0;
 			for (DropEntry[] arr : dropMatrix) {
 				int eggCount = 0;
-				worst++;
+				maxDrops++;
 				for (DropEntry drop : arr) {
 					eggCount++;
 					if (drop != null)
-						System.out.println("WC: " + worst + ", "
-								+ eggCount + " eggs    start: "
+						System.out.println("Max Drops: " + maxDrops + ", eggs: "
+								+ eggCount + "    start: "
 								+ drop.start + " covers: "
 								+ drop.length);
 				}
@@ -67,19 +67,19 @@ public class DropTree {
 	/**
 	 * finds a previously made DropEntry or makes a new one
 	 * 
-	 * @param worstCase
+	 * @param maxDrops
 	 * @param eggs
 	 * @return the coresponding DropEntry
 	 */
-	private DropEntry getEntry(int worstCase, int eggs) {
-		if (worstCase <= 0)
+	private DropEntry getEntry(int maxDrops, int eggs) {
+		if (maxDrops <= 0)
 			return null;
-		if (worstCase >= dropMatrix.size())
+		if (maxDrops >= dropMatrix.size())
 			dropMatrix.add(new DropEntry[maxEggs]);
-		DropEntry[] arr = dropMatrix.get(worstCase - 1);
+		DropEntry[] arr = dropMatrix.get(maxDrops - 1);
 		DropEntry ret = arr[eggs - 1];
 		if (ret == null) {
-			ret = makeDrop(worstCase, eggs);
+			ret = makeDrop(maxDrops, eggs);
 			arr[eggs - 1] = ret;
 		}
 		return ret;
@@ -88,18 +88,18 @@ public class DropTree {
 	/**
 	 * makes a new DropEntry
 	 * 
-	 * @param worstCase
+	 * @param maxDrops
 	 * @param eggs
 	 * @return the new DropEntry
 	 */
-	private DropEntry makeDrop(int worstCase, int eggs) {
-		if (worstCase == 1)
+	private DropEntry makeDrop(int maxDrops, int eggs) {
+		if (maxDrops == 1)
 			return new DropEntry(1, 1);
 		if (eggs == 1)
-			return new DropEntry(1, worstCase);
-		int start = getEntry(worstCase - 1, eggs - 1).length + 1;
+			return new DropEntry(1, maxDrops);
+		int start = getEntry(maxDrops - 1, eggs - 1).length + 1;
 		return new DropEntry(start,
-				start + getEntry(worstCase - 1, eggs).length);
+				start + getEntry(maxDrops - 1, eggs).length);
 	}
 
 	/**
